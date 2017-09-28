@@ -4,10 +4,17 @@ body {
   -webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 }
+a {
+  text-decoration: none !important;
+  color: #000 !important;
+  cursor: pointer !important;
+}
 .actions-container {
   position: sticky !important;
   bottom: 0;
   background-color: #FFF;
+  top: 0px;
+  transform: translateY(0px);
 }
 .add-container {
   margin-top: 90px;
@@ -15,8 +22,12 @@ body {
 .bigscore-wrapper div {
   display:none;
 }
-.bigscore-wrapper div.true {
+.bigscore-wrapper div.true,
+a {
   display:block;
+}
+.btn-delete {
+  color: #d06262 !important;
 }
 .flexbox-container {
   display: flex;
@@ -43,8 +54,11 @@ body {
   border-radius: 4px;
   width: 100%;
   margin: 15px 0px;
+  color: #FFF !important;
 }
-.btn-container {
+.btn-container,
+.btn-player,
+.delete-container ul  {
   width: 100%;
 }
 .player-add {
@@ -67,7 +81,9 @@ body {
   align-items: center;
   justify-content: center;
 }
-.circle:hover {
+.circle:hover,
+.modal-close:hover,
+.sortable li:hover {
   cursor: pointer;
 }
 .circle div {
@@ -108,9 +124,7 @@ body {
   padding: 20px;
   position: absolute;
   right: 5px;
-}
-.modal-close:hover {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .modalbox {
   display: none;
@@ -149,11 +163,10 @@ body {
   font-size: 2em;
   right: 30px;
 }
-.delete-container {
-  margin-top: 48px;
-}
-.delete-container ul {
-  width:100%;
+.score-buttons {
+  flex-grow: 1;
+  flex-basis: 100%;
+  display: inline-flex;
 }
 .delete-container .sortable-players li  {
   min-height: auto;
@@ -161,10 +174,8 @@ body {
 .sortable li.selected {
   background-color:#9a9a9a;
 }
-.sortable li:hover {
-  cursor: pointer;
-}
-.sortable-players {
+.sortable-players,
+.delete-container  {
   margin-top: 48px;
 }
 .sortable-players li {
