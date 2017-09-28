@@ -90,21 +90,27 @@ var PlusMinus = React.createClass({
       let classList = self.state.players[index].selectedClass;
       classList += ' ' + self.state.players[index].hide;
       return (
-        <li id={self.state.players[index].idName} draggable="true" className={classList}
-        onClick={() => self.playerSelect(self.state.players[index].idName,
-          self.state.players[index].id, self.state.players[index].selectedClass, self.state.players[index].selected)}>
-          <span className="playername">{self.state.players[index].name}</span> <span className="score-badge">{self.state.players[index].score}</span>
-        </li>
+        <a className="btn-players">
+          <li id={self.state.players[index].idName} draggable="true" className={classList}
+          onClick={() => self.playerSelect(self.state.players[index].idName,
+            self.state.players[index].id, self.state.players[index].selectedClass, self.state.players[index].selected)}
+            ontap={() => self.playerSelect(self.state.players[index].idName,
+              self.state.players[index].id, self.state.players[index].selectedClass, self.state.players[index].selected)}>
+            <span className="playername">{self.state.players[index].name}</span> <span className="score-badge">{self.state.players[index].score}</span>
+          </li>
+        </a>
       );
     });
 
     var buttonTextComponent = buttonText.map(function (item, i) {
       return (
-         <div id={self.state.players[i].idName} className={item.countClass}
+        <a className="score-buttons">
+          <div id={self.state.players[i].idName} className={item.countClass}
          onClick={() => self.eventButton(item.name, self.state.players[i].id)} ontap={() => self.eventButton(item.name, self.state.players[i].id)}
          data-value={item.name}>
           <div className="buttonText">{item.name}</div>
-        </div>
+         </div>
+        </a>
       );
     });
 
@@ -123,13 +129,15 @@ var PlusMinus = React.createClass({
 
       return (
           <li className={classList}
-          onClick={() => self.deletePlayer(self.state.players[i].id)}>
+          onClick={() => self.deletePlayer(self.state.players[i].id)}
+          ontap={() => self.deletePlayer(self.state.players[i].id)}>
             <div className="flexbox-name">
               {self.state.players[i].name}
             </div>
             <div className="flexbox-delete">
-              <a href="#" id={'delete' + self.state.players[i].id} className={self.state.players[i].selectedClass}
-              onClick={() => self.deletePlayer(self.state.players[i].id)} role="button">Delete</a>
+              <a href="#" id={'delete' + self.state.players[i].id} className="btn-delete"
+              onClick={() => self.deletePlayer(self.state.players[i].id)}
+              ontap={() => self.deletePlayer(self.state.players[i].id)} role="button">Delete</a>
             </div>
           </li>
       )
@@ -148,7 +156,7 @@ var PlusMinus = React.createClass({
 
               <div className="container">
                 <div className="row">
-                  <div className="modal-close" onClick={() => self.closeModal()}>
+                  <div className="modal-close" onClick={() => self.closeModal()} ontap={() => self.closeModal()}>
                     <div className="close">
                       &#10005;
                     </div>
@@ -204,16 +212,11 @@ var PlusMinus = React.createClass({
     );
   },
 
-  playerCheck: function() {
-    console.log('yaya');
-  },
-
   closeModal: function() {
     document.getElementById('modalbox').style.display = 'none';
   },
 
   addNewPlayer: function() {
-    console.log('add new player');
     var nextId = this.state.players.length + 1;
     var newPlayerObject = [{
       "id": String(nextId),
@@ -237,7 +240,6 @@ var PlusMinus = React.createClass({
   },
 
   addPlayerModal: function() {
-    console.log('add');
     document.getElementById('modalbox').style.display = 'block';
   },
 
@@ -249,8 +251,7 @@ var PlusMinus = React.createClass({
     this.setState({
       hide: 'hide'
     });
-    console.log(this.state)
-    this.forceUpdate()
+    this.forceUpdate();
   },
 
   eventButton: function(score){
@@ -262,6 +263,14 @@ var PlusMinus = React.createClass({
     this.setState({
       score: score
     });
+    this.playerColors();
+  },
+
+  playerColors: function() {
+
+    var json = this.state.players;
+    console.log(json);
+
   },
 
   playerSelect: function(playerId, id, selectedClass, selected) {
