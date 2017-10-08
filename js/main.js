@@ -14,6 +14,7 @@ var ComSingleComponent = React.createClass({
 });
 
 var selectedPlayer = "1";
+var playerOrder = [];
 var ComWrapper = React.createClass({
     render: function() {
       return (
@@ -33,36 +34,40 @@ var PlusMinus = React.createClass({
   getInitialState() {
     var players = [{
       "id": "1",
-      "name": "component 1",
+      "name": "Player 1",
       "idName": "player1",
       "score": 0,
       "selectedClass": "selected",
       "selected": true,
-      "hide": ""
+      "hide": "",
+      "rank": 1
     }, {
       "id": "2",
-      "name": "component 2",
+      "name": "Player 2",
       "idName": "player2",
       "score": 0,
       "selectedClass": "",
       "selected": false,
-      "hide": ""
+      "hide": "",
+      "rank": 2
     }, {
       "id": "3",
-      "name": "component 3",
+      "name": "Player 3",
       "idName": "player3",
       "score": 0,
       "selectedClass": "",
       "selected": false,
-      "hide": ""
+      "hide": "",
+      "rank": 3
     }, {
       "id": "4",
-      "name": "component 4",
+      "name": "Player 4",
       "idName": "player4",
       "score": 0,
       "selectedClass": "",
       "selected": false,
-      "hide": ""
+      "hide": "",
+      "rank": 4
     }];
     return {
         players
@@ -96,7 +101,11 @@ var PlusMinus = React.createClass({
             self.state.players[index].id, self.state.players[index].selectedClass, self.state.players[index].selected)}
             ontap={() => self.playerSelect(self.state.players[index].idName,
               self.state.players[index].id, self.state.players[index].selectedClass, self.state.players[index].selected)}>
-            <span className="playername">{self.state.players[index].name}</span> <span className="score-badge">{self.state.players[index].score}</span>
+            <span className="playername">{self.state.players[index].name}</span>
+              <span className="score-badge">
+                <span className="player-rank">{self.state.players[index].rank}</span>
+                  <span className="player-score">{self.state.players[index].score}</span>
+              </span>
           </li>
         </a>
       );
@@ -156,20 +165,20 @@ var PlusMinus = React.createClass({
 
               <div className="container">
                 <div className="row">
-                  <div className="modal-close" onClick={() => self.closeModal()} ontap={() => self.closeModal()}>
+                  <a href="#" className="modal-close" onClick={() => self.closeModal()} ontap={() => self.closeModal()}>
                     <div className="close">
                       &#10005;
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
 
               <div className="add-container">
                 <div className="container">
                   <div className="row">
-                    <input type="text" className="txt txt-addplayer" id="txtNewPlayer" />
+                    <input type="text" className="txt txt-addplayer" id="txtNewPlayer" placeholder="Enter player name" />
                     <div className="btn-container">
-                      <a href="#" className="btn btn-add btn-primary" id="btn-add" onClick={() => self.addNewPlayer()}>add</a>
+                      <a href="#" className="btn btn-add btn-primary" id="btn-add" onClick={() => self.addNewPlayer()}>Add Player</a>
                     </div>
                   </div>
                 </div>
@@ -225,7 +234,8 @@ var PlusMinus = React.createClass({
       "score": 0,
       "selectedClass": "",
       "selected": false,
-      "hide": ""
+      "hide": "",
+      "rank": nextId
     }];
     var players = [];
     player = this.state.players;
@@ -234,7 +244,8 @@ var PlusMinus = React.createClass({
       idName: "player" + nextId,
       score: 0,
       selectedClass:'',
-      selected: false
+      selected: false,
+      rank: nextId
     });
     this.forceUpdate();
   },
@@ -255,6 +266,7 @@ var PlusMinus = React.createClass({
   },
 
   eventButton: function(score){
+    //find out what the selected player is if it may have changed.
     var self = this;
     var item = this.state.players[selectedPlayer - 1].score;
     var buttonValue = score.substring(1);
@@ -263,13 +275,47 @@ var PlusMinus = React.createClass({
     this.setState({
       score: score
     });
-    this.playerColors();
+    this.playerRanking();
   },
 
-  playerColors: function() {
+  playerRanking: function() {
+     var self = this;
+     var item;
+     playerOrder = [];
+     var json = document.getElementsByClassName('score-badge');
+     var tempRank = [];
+     var tempScore = [];
 
-    var json = this.state.players;
-    console.log(json);
+     for (i=0; i<this.state.players.length; i++) {
+       var count = i;
+       tempRank.push({index: i, score :this.state.players[i].score})
+     }
+
+    for (i=0; i<this.state.players.length; i++) {
+      playerOrder = tempRank.sort(function(a,b) {
+        return (b.score-a.score);
+      })
+    }
+
+    var sortIndex = 0;
+    var rank = 0;
+    for (i=0; i< this.state.players.length; i++) {
+      sortIndex = tempRank[i].index;
+      newRank = i+1;
+      this.setNewRank(i, newRank, sortIndex);
+      this.forceUpdate()
+    }
+  },
+
+  setNewRank: function(index, rank, sortIndex) {
+    var self = this;
+    var object = this.state.players[sortIndex];
+    object.rank = rank;
+    this.setState({
+      rank: rank
+    }, () => {
+      this.forceUpdate()
+    })
 
   },
 
